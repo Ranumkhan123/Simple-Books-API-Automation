@@ -65,4 +65,8 @@ This project is built by Ranum Khan as part of her API Testing Practice Portfoli
 ---
 
 ## Feedback
-If you like this collection,if this helped or inspired you, do give a ⭐ star or fork it! and connect via LinkedIn(https://www.linkedin.com/in/ranum-khan-qaengineer/). PRs and suggestions are welcome!
+I'm a passionate Software QA Engineer with 4+ years of experience in manual and API testing. I'm currently transitioning into advanced API automation and sharing my learning publicly. If you like this collection, if this helped or inspired you, do give a ⭐ star or fork it! and connect via LinkedIn. PRs and suggestions are welcome! 
+
+- ** https://www.linkedin.com/in/ranum-khan-qaengineer **
+- ** https://github.com/Ranumkhan123 **
+- ** ranumkhan123@gmail.com **
