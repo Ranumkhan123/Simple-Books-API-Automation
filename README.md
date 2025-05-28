@@ -26,7 +26,6 @@ The objective of this project is to demonstrate how to perform **comprehensive A
 - **Randomized Test Data to Improve Coverage**
 - **Active Postman Monitors for scheduled health testing**
 - **Automated reports via Newman HTML Reporter**
-- 
 
 ---
 
