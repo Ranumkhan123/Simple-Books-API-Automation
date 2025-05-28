@@ -1,8 +1,0 @@
-## Reports
-
-| Type                     | Description                        |
-|--------------------------|------------------------------------|
-| 1. Monitor Report (PDF)  | Scheduled monitor test summary     |   
-| 2. Newman Test Report    | Full test report from CLI run      |
-| 3. Extra HTML Report     | Styled HTML version for sharing    |
-
