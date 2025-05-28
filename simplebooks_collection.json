@@ -1,0 +1,1475 @@
+{
+	"info": {
+		"_postman_id": "423b4851-8e03-45ec-a95f-63acc1ce502b",
+		"name": "SimpleBooks_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15491437"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Authentication",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"let accessToken = jsonData.accessToken;\r",
+									"\r",
+									"pm.environment.set(\"accessToken\", accessToken);\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"\r",
+									"// Print first 3 items if response is an array\r",
+									"if (Array.isArray(jsonData)) {\r",
+									"    jsonData.slice(0, 3).forEach((item, index) => {\r",
+									"        console.log(`Sample Item ${index + 1}:`, item);\r",
+									"    });\r",
+									"} else {\r",
+									"    console.log(\"Response Object:\", jsonData);\r",
+									"}\r",
+									"\r",
+									"//  Tests\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 3000 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 5000000 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(5000000); \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"clientName\": \"{{$randomFullName}}\",\r\n   \"clientEmail\": \"{{$randomExampleEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BooksURL}}/api-clients/",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"api-clients",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Base URL Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"//  Tests\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"  //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 3000 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 5000000 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(5000000); \r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response body\", () => {\r",
+									"    const data = pm.response.json();\r",
+									"\r",
+									"    // Check presence\r",
+									"    pm.expect(data.message).to.exist;\r",
+									"\r",
+									"      // Check types\r",
+									"    pm.expect(data.message).to.be.a(\"string\");\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"\r",
+									"// Print first 3 items if response is an array\r",
+									"if (Array.isArray(jsonData)) {\r",
+									"    jsonData.slice(0, 3).forEach((item, index) => {\r",
+									"        console.log(`Sample Item ${index + 1}:`, item);\r",
+									"    });\r",
+									"} else {\r",
+									"    console.log(\"Response Object:\", jsonData);\r",
+									"}\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BooksURL}}",
+							"host": [
+								"{{BooksURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Books",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Puri books ki list le lo\r",
+									"const books = pm.response.json();\r",
+									"\r",
+									"// Count kitni books hain\r",
+									"let totalBooks = books.length;\r",
+									"\r",
+									"// 0 se le kar total tak koi bhi index\r",
+									"let randomIndex = Math.floor(Math.random() * totalBooks);\r",
+									"\r",
+									"// Random book ka ID uthao\r",
+									"let bookId = books[randomIndex].id;\r",
+									"\r",
+									"// Usko bookId variable mein save karo\r",
+									"pm.collectionVariables.set(\"bookId\", bookId);\r",
+									"\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"//  Tests\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"    //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 3000 seconds \", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 5000 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response Body and Data types\", function () {\r",
+									"    //  Response Body: check it's an array and not empty\r",
+									"    pm.expect(jsonData).to.be.an('array').that.is.not.empty;\r",
+									"\r",
+									"    // Data Types: check first item for expected fields\r",
+									"    const book = jsonData[0];\r",
+									"    pm.expect(book).to.have.property('id').that.is.a('number');\r",
+									"    pm.expect(book).to.have.property('name').that.is.a('string');\r",
+									"    pm.expect(book).to.have.property('type').that.is.a('string');\r",
+									"    pm.expect(book).to.have.property('available').that.is.a('boolean');\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"\r",
+									"// Print first 3 items if response is an array\r",
+									"if (Array.isArray(jsonData)) {\r",
+									"    jsonData.slice(0, 3).forEach((item, index) => {\r",
+									"        console.log(`Item ${index + 1}:`, item);\r",
+									"    });\r",
+									"} else {\r",
+									"    console.log(\"Response Object:\", jsonData);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BooksURL}}/books",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Random Book ID → In Stock / Out of Stock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();   // API ka response le liya \r",
+									"\r",
+									"let book = res;\r",
+									"let stock = res[\"current-stock\"];   // stock ki value nikal li\r",
+									"\r",
+									"let id = book.id;\r",
+									"let name = book.name;\r",
+									"let author = book.author;\r",
+									"let type = book.type;\r",
+									"let price = book.price;\r",
+									"let available = book.available;\r",
+									"\r",
+									"// Tests\r",
+									"\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 5 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"  //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 500 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(500); \r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response Body and Data types\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"        pm.expect(book).to.have.property('id').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('name').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('author').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('type').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('price').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('current-stock').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('available').that.is.a('boolean');\r",
+									"        \r",
+									"});\r",
+									"\r",
+									"//  Stock Availability Test: Check if stock is available or not based on the value of stock variable.\r",
+									"if (stock === 0) {\r",
+									"    pm.test(\"Out of Stock\", function () {\r",
+									"        pm.expect(stock).to.eql(0);\r",
+									"        console.log(\"Book is Out of stock\");\r",
+									"    });\r",
+									"} else {\r",
+									"    pm.test(\"In Stock\", function () {\r",
+									"        pm.expect(stock).to.be.above(0);\r",
+									"        console.log(\"Book is in stock\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"\r",
+									"\r",
+									"// Log Book Details\r",
+									"console.log(\"Book Details\")\r",
+									"console.log(\"Book ID:\", id);\r",
+									"console.log(\"Book Name:\", name);\r",
+									"console.log(\"Book Author:\", author);\r",
+									"console.log(\"Book Type:\", type);\r",
+									"console.log(\"Book Price:\", price);\r",
+									"console.log(\"Current Stock:\", stock);\r",
+									"console.log(\"Book Available:\", available);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BooksURL}}/books/:id",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{bookId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Random Book ID → Available / Not Available",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();   // API ka response le liya \r",
+									"\r",
+									"let book = res;\r",
+									"let available = res.available;   \r",
+									"let id = book.id;\r",
+									"let name = book.name;\r",
+									"let author = book.author;\r",
+									"let type = book.type;\r",
+									"let price = book.price;\r",
+									"let stock = book[\"current-stock\"];   // stock ki value nikal li\r",
+									"\r",
+									"\r",
+									"// Tests\r",
+									"\r",
+									"//Status Code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 5 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"  //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 500 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(500); \r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response Body and Data types\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"        pm.expect(book).to.have.property('id').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('name').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('author').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('type').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('price').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('current-stock').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('available').that.is.a('boolean');\r",
+									"        \r",
+									"});\r",
+									"\r",
+									"//  Check if book is available or not.\r",
+									"if (available === true) {\r",
+									"    pm.test(\"Book Available\", function () {\r",
+									"        pm.expect(available).to.be.eql(true);\r",
+									"        console.log(\"Book is Available\");\r",
+									"    });\r",
+									"} else {\r",
+									"    pm.test(\"Book Not Available\", function () {\r",
+									"        pm.expect(available).to.be.eql(false);\r",
+									"        console.log(\"Book is Not Available\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"\r",
+									"//Print book details\r",
+									"console.log(\"Book Details\");\r",
+									"console.log(\"Book ID:\", id);\r",
+									"console.log(\"Book Name:\", name);\r",
+									"console.log(\"Book Author:\", author);\r",
+									"console.log(\"Book Type:\", type);\r",
+									"console.log(\"Book Price:\", price);\r",
+									"console.log(\"Current Stock:\", stock);\r",
+									"console.log(\"Book Available:\", available);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BooksURL}}/books/:id",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{bookId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Random Book ID → Fiction / Non-Fiction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"\r",
+									"const book = res;\r",
+									"\r",
+									"let id = book.id;\r",
+									"let name = book.name;\r",
+									"let author = book.author;\r",
+									"let type = book.type;\r",
+									"let price = book.price;\r",
+									"let stock = book[\"current-stock\"];\r",
+									"let available = book.available;\r",
+									"\r",
+									"\r",
+									"// Tests\r",
+									"\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 5 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 500 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(500); \r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"  //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response Body and Data types\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"        pm.expect(book).to.have.property('id').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('name').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('author').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('type').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('price').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('current-stock').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('available').that.is.a('boolean');\r",
+									"        \r",
+									"});\r",
+									"\r",
+									"//  Book Type Test: Check book type\r",
+									"if (type === \"fiction\") {\r",
+									"    pm.test(\"Book Type is Fiction\", function () {\r",
+									"        pm.expect(type).to.be.eql('fiction'); \r",
+									"        console.log(\"Book Type is Fiction\");\r",
+									"    });\r",
+									"} else {\r",
+									"    pm.test(\"Book Type is Non-Fiction\", function () {\r",
+									"        pm.expect(type).to.be.eql('non-fiction'); \r",
+									"        console.log(\"Book Type is Non-Fiction\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"\r",
+									"\r",
+									"// Log Book Details\r",
+									"console.log(\"Book Details\")\r",
+									"console.log(\"Book ID:\", id);\r",
+									"console.log(\"Book Name:\", name);\r",
+									"console.log(\"Book Author:\", author);\r",
+									"console.log(\"Book Type:\", type);\r",
+									"console.log(\"Book Price:\", price);\r",
+									"console.log(\"Current Stock:\", stock);\r",
+									"console.log(\"Book Available:\", available);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BooksURL}}/books/:id",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{bookId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Book with BookID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();   // API ka response le liya \r",
+									"\r",
+									"const book = res;\r",
+									"\r",
+									"let id = book.id;\r",
+									"let name = book.name;\r",
+									"let author = book.author;\r",
+									"let type = book.type;\r",
+									"let price = book.price;\r",
+									"let stock = book[\"current-stock\"];\r",
+									"let available = book.available;\r",
+									"\r",
+									"\r",
+									"// Tests\r",
+									"\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 5 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 500 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(500); \r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"  //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response Body and Data types\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"        pm.expect(book).to.have.property('id').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('name').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('author').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('type').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('price').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('current-stock').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('available').that.is.a('boolean');\r",
+									"        \r",
+									"});\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"\r",
+									"\r",
+									"// Log Book Details\r",
+									"console.log(\"Book Details\")\r",
+									"console.log(\"Book ID:\", id);\r",
+									"console.log(\"Book Name:\", name);\r",
+									"console.log(\"Book Author:\", author);\r",
+									"console.log(\"Book Type:\", type);\r",
+									"console.log(\"Book Price:\", price);\r",
+									"console.log(\"Current Stock:\", stock);\r",
+									"console.log(\"Book Available:\", available);\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BooksURL}}/books/:id",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{bookId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Place Book Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"\r",
+									"pm.collectionVariables.set(\"orderId\", res.orderId);\r",
+									"\r",
+									"let name = pm.variables.replaceIn(\"{{$randomFullName}}\");\r",
+									"pm.collectionVariables.set(\"customerName\", name);\r",
+									"\r",
+									"\r",
+									"\r",
+									"let orderId = res.orderId;\r",
+									"let bookName = pm.collectionVariables.get(\"bookName\");\r",
+									"let bookType = pm.collectionVariables.get(\"bookType\");\r",
+									"let isAvailable = pm.collectionVariables.get(\"bookAvailable\");\r",
+									"let customerName = pm.collectionVariables.get(\"name\");\r",
+									"\r",
+									"\r",
+									"\r",
+									"//  Tests\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"  //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 3000 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 5000 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(5000); \r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response body\", function () {\r",
+									"        pm.expect(res).to.have.property('orderId').that.is.a('string');     \r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"console.log();\r",
+									"\r",
+									"// Print Book Info\r",
+									"console.log(\"Ordered Book\");\r",
+									"console.log(\"order ID:\", orderId);\r",
+									"console.log(\"Customer Name:\", name);\r",
+									"console.log(\"Name:\", bookName);\r",
+									"console.log(\"Type:\", bookType);\r",
+									"console.log(\"Available:\", isAvailable);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"bookId\": {{bookId}},\r\n  \"customerName\": \"{{customerName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BooksURL}}/orders",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Attempt Order (Out of Stock)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"\r",
+									"\r",
+									"//  Tests\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"  //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 3000 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 5000 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(5000); \r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response body\", function () {\r",
+									"        pm.expect(res).to.have.property('error').that.is.a('string');     \r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"console.log();\r",
+									"\r",
+									"// Print detail of order \r",
+									"if (res.error) {\r",
+									"    console.log(\"Order Failed\");\r",
+									"    console.log(\"Error Message:\", res.error);\r",
+									"} else {\r",
+									"    console.log(\"Order Successful\");\r",
+									"    console.log(\"Order ID:\", res.orderId);\r",
+									"}\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"bookId\": \"2\",\r\n  \"customerName\": \"{{customerName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BooksURL}}/orders",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View All Orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"\r",
+									"\r",
+									"//  Tests\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"  //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 3000 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 5000 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(5000); \r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response Body and Data types\", function () {\r",
+									"  const jsonData = pm.response.json();\r",
+									"\r",
+									"    //  Response Body: check it's an array and not empty\r",
+									"    pm.expect(jsonData).to.be.an('array').that.is.not.empty;\r",
+									"\r",
+									"    // Data Types: check first item for expected fields\r",
+									"    const book = jsonData[0];\r",
+									"        pm.expect(book).to.have.property('id').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('bookId').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('customerName').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('createdBy').that.is.a('string');\r",
+									"        pm.expect(book).to.have.property('quantity').that.is.a('number');\r",
+									"        pm.expect(book).to.have.property('timestamp').that.is.a('number');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"console.log();\r",
+									"\r",
+									"\r",
+									"// Print first items if response is an array\r",
+									"if (Array.isArray(res)) {\r",
+									"    res.slice(0, 4).forEach((item, index) => {\r",
+									"        console.log(`Order ${index + 1}:`, item);\r",
+									"    });\r",
+									"} else {\r",
+									"    console.log(\"Response Object:\", res);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BooksURL}}/orders",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"\r",
+									"// Extract values\r",
+									"let bookId = res.bookId;\r",
+									"let customerName = res.customerName;\r",
+									"let createdBy = res.createdBy;\r",
+									"let quantity = res.quantity;\r",
+									"let timestamp = res.timestamp;\r",
+									"\r",
+									"//saved cutomer name in var\r",
+									"pm.collectionVariables.set(\"customerName\", res.customerName);\r",
+									"\r",
+									"\r",
+									"// Save as variables\r",
+									"pm.collectionVariables.set(\"bookId\", bookId);\r",
+									"pm.collectionVariables.set(\"customerName\", customerName);\r",
+									"pm.collectionVariables.set(\"createdBy\", createdBy);\r",
+									"pm.collectionVariables.set(\"quantity\", quantity);\r",
+									"pm.collectionVariables.set(\"timestamp\", timestamp);\r",
+									"\r",
+									"\r",
+									"//  Tests\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Content Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"  //  pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 3000 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 5000 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(5000); \r",
+									"});\r",
+									"\r",
+									"//  Body: check for expected fields and data types\r",
+									"pm.test(\"Validate response Body and Data types\", function () {\r",
+									"    const data = pm.response.json();\r",
+									"\r",
+									"    // Directly check properties of the object\r",
+									"    pm.expect(data).to.have.property('id').that.is.a('string');\r",
+									"    pm.expect(data).to.have.property('bookId').that.is.a('number');\r",
+									"    pm.expect(data).to.have.property('customerName').that.is.a('string');\r",
+									"    pm.expect(data).to.have.property('createdBy').that.is.a('string');\r",
+									"    pm.expect(data).to.have.property('quantity').that.is.a('number');\r",
+									"    pm.expect(data).to.have.property('timestamp').that.is.a('number');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"console.log();\r",
+									"\r",
+									"\r",
+									"\r",
+									"// Log to console\r",
+									"console.log(\"Book Info:\");\r",
+									"console.log(\"Book Id\", bookId);\r",
+									"console.log(\"Customer Name:\", customerName);\r",
+									"console.log(\"Created By:\", createdBy);\r",
+									"console.log(\"Quantity:\", quantity);\r",
+									"console.log(\"Timestamp:\", timestamp);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BooksURL}}/orders/:id",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"orders",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{orderId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let first = pm.collectionVariables.get(\"customerName\");\r",
+									"let last = pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+									"pm.collectionVariables.set(\"updatedName\", `${first} ${last}`);\r",
+									"\r",
+									"\r",
+									"\r",
+									"//  Tests\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 3000 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 5000 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(5000); \r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"console.log();\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"customerName\" : \"{{updatedName}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BooksURL}}/orders/{{orderId}}",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"orders",
+								"{{orderId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.text();\r",
+									"\r",
+									"//  Tests\r",
+									"//status Code\r",
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"//Response time\r",
+									"pm.test(\"Response time is less than 3000 seconds \" , function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+									"});\r",
+									"\r",
+									"//Response Size\r",
+									"pm.test(\"Response size is less than 5000 Bytes\", function () {\r",
+									"    pm.expect(pm.response.size().body).to.be.below(5000); \r",
+									"});\r",
+									"\r",
+									"\r",
+									"//  Log Summary Info\r",
+									"console.log(\"Status Code:\", pm.response.code);\r",
+									"console.log(\"Response Time:\", pm.response.responseTime + \"ms\");\r",
+									"console.log(\"Response Size:\", pm.response.size().body + \" bytes\");\r",
+									"console.log();\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BooksURL}}/orders/{{orderId}}",
+							"host": [
+								"{{BooksURL}}"
+							],
+							"path": [
+								"orders",
+								"{{orderId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "randomUserName",
+			"value": "{{$randomFullName}}",
+			"type": "string"
+		},
+		{
+			"key": "bookName",
+			"value": ""
+		},
+		{
+			"key": "bookType",
+			"value": ""
+		},
+		{
+			"key": "bookAvailable",
+			"value": ""
+		},
+		{
+			"key": "createdBy",
+			"value": ""
+		},
+		{
+			"key": "quantity",
+			"value": ""
+		},
+		{
+			"key": "timestamp",
+			"value": ""
+		},
+		{
+			"key": "bookId",
+			"value": ""
+		},
+		{
+			"key": "updatedName",
+			"value": ""
+		},
+		{
+			"key": "orderId",
+			"value": ""
+		},
+		{
+			"key": "current-stock",
+			"value": ""
+		},
+		{
+			"key": "customerName",
+			"value": ""
+		}
+	]
+}
