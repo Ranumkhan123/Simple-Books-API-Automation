@@ -13,6 +13,7 @@ The objective of this project is to demonstrate how to perform **comprehensive A
 - Automating test execution with Newman.
 - Creating visual test reports in HTML and PDF.
 - Practicing real-world scenarios, including authorization, edge cases, and failures.
+- API Monitoring for scheduled health checks.
 
 ---
 
@@ -23,31 +24,44 @@ The objective of this project is to demonstrate how to perform **comprehensive A
 - **Automated Test Reports via Newman HTML Reporter** 
 - **PDF Export of Test Results for Reporting and Sharing** 
 - **Randomized Test Data to Improve Coverage**
+- **Active Postman Monitors for scheduled health testing**
+- **Automated reports via Newman HTML Reporter**
+- 
 
 ---
 
 ## Test Coverage Breakdown
 
-| Area                          | Description                                  |
-|-------------------------------|----------------------------------------------|
-| Status Code                   | Validates HTTP status codes 
-| Response Headers              | Checks Content-Type, Caching, etc.  
-| Response Body Structure       | Validates required keys and format 
-| Data Types                    | Validates string, boolean, number types  
-| Authentication Token          | Generated and reused across requests  
-| Random Data Testing           | Dynamic client names and request bodies  
-| Response Time & Size          | Checks performance thresholds    
-| Token Storage in Env Var      | Postman script extracts & saves token 
+| Area                          |  Description                                  |
+|-------------------------------|-----------------------------------------------|
+| Status Code                   |  Validates HTTP status codes                  |
+| Response Headers              |  Checks Content-Type, Caching, etc.           | 
+| Response Body Structure       |  Validates required keys and format           |  
+| Data Types                    |  Validates string, boolean, number types      |
+| Authentication Token          |  Generated and reused across requests         |
+| Random Data Testing           |  Dynamic client names and request bodies      |
+| Response Time & Size          |  Checks performance thresholds                | 
+| Token Storage in Env Var      |  Postman script extracts & saves token        | 
+| Monitors                      |  Scheduled auto-test runs with alerts         |
 
 ---
 
+## Monitor Setup
+
+- A monitor has been set up in Postman to run key test cases every day.
+- Alerts are shown for any failed test.
+- Response time, size, and status are validated in scheduled runs.
+
+---
 
 ##  Technologies Used
 
 - **Postman** – For API requests, environments, and testing
 - **Newman** – For CLI-based test automation
+- **Postman Monitors** – For continuous monitoring and alerting
 - **HTML Reporter** – For visual test result reports
 - **JavaScript** – For assertions, scripting and chaining
+
 
 ---
 
